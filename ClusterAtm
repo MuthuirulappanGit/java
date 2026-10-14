@@ -1,0 +1,106 @@
+import java.util.HashMap;
+import java.util.Scanner;
+class Account {
+ private int accountNumber;
+ private int pin;
+ private double balance;
+ private String accountHolderName;
+ public Account(int accountNumber, int pin, double balance, String accountHolderName) {
+ this.accountNumber = accountNumber;
+ this.pin = pin;
+ this.balance = balance;
+ this.accountHolderName = accountHolderName;
+ }
+ public boolean checkPin(int enteredPin) {
+ return this.pin == enteredPin;
+ }
+ public void deposit(double amount) {
+ if (amount > 0) {
+ balance = balance + amount;
+ System.out.println("Deposit is Successful");
+ System.out.println("Current Balance: " + balance);
+ } else {
+ System.out.println("Invalid Amount");
+ }
+ }
+ public boolean withdraw(double amount) {
+ if (amount <= 0) {
+ System.out.println("Invalid Amount");
+ return false;
+ }
+ if (amount % 100 != 0) {
+ System.out.println("Amount should be a multiple of 100!");
+ return false;
+ }
+ if (amount > balance) {
+ System.out.println("Insufficient Balance");
+ return false;
+ }
+ balance = balance - amount;
+ System.out.println("Withdrawal successful! Please collect your cash.");
+ System.out.println("Current Balance: " + balance);
+ return true;
+ }
+ public double getBalance() {
+ return balance;
+ }
+ public int getAccountNumber() {
+ return accountNumber;
+ }
+ public String getAccountHolderName() {
+ return accountHolderName;
+ }
+}
+public class ClusterAtm {
+ public static void main(String[] args) {
+ Scanner in = new Scanner(System.in);
+ HashMap<Integer, Account> accounts = new HashMap<>();
+ accounts.put(1189, new Account(1189, 45678, 80000.0, "Brijeesh"));
+ accounts.put(1178, new Account(1178, 45468, 90000.0, "Uban"));
+ accounts.put(1158, new Account(1158, 45564, 95000.0, "Abdul"));
+ System.out.print("Enter the Account number: ");
+ int accnum = in.nextInt();
+ System.out.print("Enter the PIN: ");
+ int enteredPin = in.nextInt();
+ Account acc = accounts.get(accnum); if (acc == null) {
+ System.out.println("No account found...!");
+ return;
+ }
+ if (!acc.checkPin(enteredPin)) {
+ System.out.println("Incorrect PIN!");
+ return;
+ }
+ System.out.println("Login successful! Welcome, " + acc.getAccountHolderName());
+ int choice;
+ do {
+ System.out.println("\n===== ATM MENU =====");
+ System.out.println("1. Check Balance");
+ System.out.println("2. Deposit");
+ System.out.println("3. Withdraw");
+ System.out.println("4. Exit");
+ System.out.print("Enter choice: ");
+ choice = in.nextInt();
+ switch (choice) {
+ case 1:
+ System.out.println("Your balance: " + acc.getBalance());
+break;
+ case 2:
+ System.out.print("Enter amount to deposit: ");
+double depositAmt = in.nextDouble();
+acc.deposit(depositAmt);
+break;
+ case 3:
+ System.out.print("Enter amount to withdraw: ");
+double withdrawAmt = in.nextDouble();
+acc.withdraw(withdrawAmt);
+break;
+ case 4:
+ System.out.println("Thank you for using the ATM. Goodbye!");
+break;
+ default:
+ System.out.println("Invalid choice! Try again.");
+ }
+ } while (choice != 4);
+ in.close();}
+
+
